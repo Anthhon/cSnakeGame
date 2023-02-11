@@ -162,24 +162,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named cSnake
+# Target rules for targets named cSnakeGame
 
 # Build rule for target.
-cSnake: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cSnake
-.PHONY : cSnake
+cSnakeGame: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cSnakeGame
+.PHONY : cSnakeGame
 
 # fast build rule for target.
-cSnake/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cSnake.dir/build.make CMakeFiles/cSnake.dir/build
-.PHONY : cSnake/fast
+cSnakeGame/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cSnakeGame.dir/build.make CMakeFiles/cSnakeGame.dir/build
+.PHONY : cSnakeGame/fast
 
 main.o: main.c.o
 .PHONY : main.o
 
 # target to build an object file
 main.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cSnake.dir/build.make CMakeFiles/cSnake.dir/main.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cSnakeGame.dir/build.make CMakeFiles/cSnakeGame.dir/main.c.o
 .PHONY : main.c.o
 
 main.i: main.c.i
@@ -187,7 +187,7 @@ main.i: main.c.i
 
 # target to preprocess a source file
 main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cSnake.dir/build.make CMakeFiles/cSnake.dir/main.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cSnakeGame.dir/build.make CMakeFiles/cSnakeGame.dir/main.c.i
 .PHONY : main.c.i
 
 main.s: main.c.s
@@ -195,7 +195,7 @@ main.s: main.c.s
 
 # target to generate assembly for a file
 main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/cSnake.dir/build.make CMakeFiles/cSnake.dir/main.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cSnakeGame.dir/build.make CMakeFiles/cSnakeGame.dir/main.c.s
 .PHONY : main.c.s
 
 # Help Target
@@ -210,7 +210,7 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... cSnake"
+	@echo "... cSnakeGame"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
