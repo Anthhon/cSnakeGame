@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<curses.h>
 
+// Parameters tell where to draw the snake
 void drawSnake(int x_vec, int y_vec){
 	move(x_vec, y_vec);
 	addstr("             ____");
