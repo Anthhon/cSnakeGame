@@ -28,6 +28,12 @@ Using GCC
 
 # Roadmap
 Here is some features that i want to add to this project by priority order
+
+## Basic-features
+OK - Game menu
+OK - Menu navigation
+UNCOMPLETE - Exit button/screen
+
 ## Ingame-features
 - Implement the snake movement using WASD
 - Apples to spawn in random places in-frame
@@ -38,7 +44,7 @@ Here is some features that i want to add to this project by priority order
 - Difficulty option (Game frame gets smaller)
 
 ## Others
-- 
+- Extra menu option with a snake running to catch a apple
 - Score menu option with last tries and some contributors best scores (Please be honest about your best haha)
 - Credits page with my name + possible contributors name with some fancy ascii art
 - Ask user if he really wants to exit the game
