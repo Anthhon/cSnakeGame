@@ -17,9 +17,9 @@ void drawSnake(int x_vec, int y_vec){
 	return;
 }
 
-void printBlock(void){
-	const short unsigned BOX_SIZE_H = 50;
-	const short unsigned BOX_SIZE_V = 15;
+void printBlock(unsigned short SIZE_H, unsigned short SIZE_V){
+	const short unsigned BOX_SIZE_H = SIZE_H;
+	const short unsigned BOX_SIZE_V = SIZE_V;
 	char BOX_CHAR = '#';
 
 	for (int x_vec = 0; x_vec <= BOX_SIZE_V; ++x_vec){
@@ -37,10 +37,12 @@ void printBlock(void){
 	return;
 }
 
-void printMenu(void){
+int printMenu(void){
 	int x_vec = 11,
 	    y_vec = 10;
 
+	// Draw frame
+	printBlock(80, 28);
 	// Parameters tell where to draw snake
 	drawSnake(5, 10);
 	// Draw the menu header
@@ -56,16 +58,67 @@ void printMenu(void){
 	addstr("2) Credits");
 	move(++x_vec, y_vec);
 	addstr("3) Exit");
-
-	// Move cursor to final position
 	move(++x_vec, y_vec);
+	move(++x_vec, y_vec);
+	addstr("TIP: use W and S arrow to navigate and ENTER to select!");
+
+	// Menu navigation 
+	x_vec = 15;
+	y_vec = 10;
+	short int menu_start = 15;
+	short int menu_end = 17;
+	move(x_vec, y_vec); // Move cursor to first option
+	noecho(); // Avoid overwritting in screen
+	
+	while(true){
+		int key = getch();
+		switch(key){
+			case 'w':
+				move(--x_vec, y_vec);
+				if (x_vec < menu_start){
+					x_vec = menu_end;
+					move(x_vec, y_vec);
+				}
+				break;
+			case 's':
+				move(++x_vec, y_vec);
+				if (x_vec > menu_end){
+					x_vec = menu_start;
+					move(x_vec, y_vec);
+				}
+				break;
+			case '\n':
+				return x_vec;
+				break;
+		}
+	}
 }
 
 int main(void){
+	// Start main menu
 	initscr();
-	// printBlock();
-	printMenu();
-	getch();
+	switch(printMenu()){
+		case 15:
+			// Start game
+			clear();
+			addstr("Game started!");
+			getch();
+			break;
+		case 16:
+			// Show credits
+			clear();
+			addstr("Game made by Anthhon");
+			getch();
+			break;
+		case 17:
+			// Exit message
+			clear();
+			addstr("Do You really want to exit the game? (Y/N)");
+			getch();
+			break;
+	}
+
+	// Exit game
 	endwin();
 	return 0;
 }
