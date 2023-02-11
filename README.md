@@ -31,8 +31,11 @@ Here is some features that i want to add to this project by priority order
 
 ## Basic-features
 OK - Game menu
+
 OK - Menu navigation
+
 OK - Credits screen
+
 OK - Exit button/screen
 
 ## Ingame-features
