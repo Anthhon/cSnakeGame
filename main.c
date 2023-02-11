@@ -38,15 +38,38 @@ void printBlock(unsigned short SIZE_H, unsigned short SIZE_V){
 	return;
 }
 
+int exitMenu(void){
+	int x_vec = 5,
+	    y_vec = 10;
+
+	// Print menu
+	clear();
+	printBlock(52, 10);
+	move(x_vec, y_vec);
+
+	// Ask question
+	addstr("You really want to quit? (Y/N)");
+	move(++x_vec, y_vec);
+	int key = getch();
+
+	if (key == 'Y' || key == 'y')
+		return 1;
+	else if (key == 'N' || key == 'n')
+		return 2;
+	else exitMenu();
+}
+
 int printMenu(void){
 	int x_vec = 11,
 	    y_vec = 10;
 
 	// Draw frame
+	clear();
 	printBlock(80, 28);
 	// Parameters tell where to draw snake
 	drawSnake(5, 10);
 	// Draw the menu header
+	// drawTitle(30, 10);
 	move(++x_vec, y_vec);
 	addstr("Welcome to cSnakeGame!!");
 	move(++x_vec, y_vec);
@@ -113,9 +136,8 @@ int main(void){
 			break;
 		case 17:
 			// Exit message
-			clear();
-			addstr("Do You really want to exit the game? (Y/N)");
-			getch();
+			if (exitMenu() == 2)
+				main();
 			break;
 	}
 
