@@ -1,6 +1,20 @@
 #include<stdio.h>
 #include<curses.h>
 
+void drawName(int x_vec, int y_vec){
+	move(x_vec, y_vec);
+	addstr(" _____       _   _");
+	move(++x_vec, y_vec);
+	addstr("|  _  |_____| |_| |_ ___ ___ _ _");
+	move(++x_vec, y_vec);
+	addstr("|     |   |_   _|   | . |   | | |");
+	move(++x_vec, y_vec);
+	addstr("|__|__|_|_| |_| |_|_|___|_|_|_  |");
+	move(++x_vec, y_vec);
+	addstr("                            |___|");
+	return;
+}
+
 // Parameters tell where to draw the snake
 void drawSnake(int x_vec, int y_vec){
 	move(x_vec, y_vec);
@@ -57,6 +71,29 @@ int exitMenu(void){
 	else if (key == 'N' || key == 'n')
 		return 2;
 	else exitMenu();
+}
+
+void creditsMenu(void){
+	clear();
+	printBlock(60, 20);
+
+	// Print my name
+	int x_vec = 6, y_vec = 10;
+	move(x_vec, y_vec);
+	addstr("Game made by:");
+	move(++x_vec, y_vec);
+	move(x_vec, y_vec);
+	drawName(x_vec, y_vec);
+
+	// Print contributors list
+	x_vec = 13;
+	move(x_vec, y_vec);
+	addstr("Contributors:");
+	move(++x_vec, y_vec);
+	addstr("No one yet :(");
+	move(++x_vec, y_vec);
+	getch();
+	return;
 }
 
 int printMenu(void){
@@ -130,9 +167,7 @@ int main(void){
 			break;
 		case 16:
 			// Show credits
-			clear();
-			addstr("Game made by Anthhon");
-			getch();
+			creditsMenu();
 			break;
 		case 17:
 			// Exit message
