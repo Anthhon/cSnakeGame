@@ -1,7 +1,15 @@
-#include<stdio.h>
 #include<curses.h>
+#include<stdio.h>
+#include<unistd.h>
 
-void drawName(int x_vec, int y_vec){
+#define UP 1
+#define RIGHT 2
+#define DOWN 3
+#define LEFT 4
+
+int main(void);
+
+void printName(int x_vec, int y_vec){
 	move(x_vec, y_vec);
 	addstr(" _____       _   _");
 	move(++x_vec, y_vec);
@@ -16,7 +24,7 @@ void drawName(int x_vec, int y_vec){
 }
 
 // Parameters tell where to draw the snake
-void drawSnake(int x_vec, int y_vec){
+void printSnake(int x_vec, int y_vec){
 	move(x_vec, y_vec);
 	addstr("             ____");
 	move(++x_vec, y_vec);
@@ -32,14 +40,14 @@ void drawSnake(int x_vec, int y_vec){
 	return;
 }
 
-void printBlock(unsigned short SIZE_H, unsigned short SIZE_V){
+void buildBlock(unsigned short SIZE_H, unsigned short SIZE_V){
 	const short unsigned BOX_SIZE_H = SIZE_H;
 	const short unsigned BOX_SIZE_V = SIZE_V;
 	char BOX_CHAR = '#';
 
 	for (int x_vec = 0; x_vec <= BOX_SIZE_V; ++x_vec){
 		for (int y_vec = 0; y_vec <= BOX_SIZE_H; ++y_vec){
-			if (x_vec == 0 || x_vec == BOX_SIZE_V){
+		if (x_vec == 0 || x_vec == BOX_SIZE_V){
 				move(x_vec, y_vec);
 				printw("%c", BOX_CHAR);
 			}
@@ -58,7 +66,7 @@ int exitMenu(void){
 
 	// Print menu
 	clear();
-	printBlock(52, 10);
+	buildBlock(52, 10);
 	move(x_vec, y_vec);
 
 	// Ask question
@@ -75,7 +83,7 @@ int exitMenu(void){
 
 void creditsMenu(void){
 	clear();
-	printBlock(60, 20);
+	buildBlock(54, 20);
 
 	// Print my name
 	int x_vec = 6, y_vec = 10;
@@ -83,7 +91,7 @@ void creditsMenu(void){
 	addstr("Game made by:");
 	move(++x_vec, y_vec);
 	move(x_vec, y_vec);
-	drawName(x_vec, y_vec);
+	printName(x_vec, y_vec);
 
 	// Print contributors list
 	x_vec = 13;
@@ -93,39 +101,34 @@ void creditsMenu(void){
 	addstr("No one yet :(");
 	move(++x_vec, y_vec);
 	getch();
+
+	// Return to menu
+	main();
 	return;
 }
 
-int printMenu(void){
-	int x_vec = 11,
-	    y_vec = 10;
+void getSnakeDir(int input, int *direction){
+	switch(input){
+		case 'w':
+			*direction = UP;
+			break;
+		case 's':
+			*direction = DOWN;
+			break;
+		case 'a':
+			*direction = LEFT;
+			break;
+		case 'd':
+			*direction = RIGHT;
+			break;
+	}
+	return;
+}
 
-	// Draw frame
-	clear();
-	printBlock(80, 28);
-	// Parameters tell where to draw snake
-	drawSnake(5, 10);
-	// Draw the menu header
-	// drawTitle(30, 10);
-	move(++x_vec, y_vec);
-	addstr("Welcome to cSnakeGame!!");
-	move(++x_vec, y_vec);
-	addstr("-----------------------");
-	move(++x_vec, y_vec);
-	addstr("Choose an option:");
-	move(++x_vec, y_vec);
-	addstr("1) Start game");
-	move(++x_vec, y_vec);
-	addstr("2) Credits");
-	move(++x_vec, y_vec);
-	addstr("3) Exit");
-	move(++x_vec, y_vec);
-	move(++x_vec, y_vec);
-	addstr("TIP: use W and S arrow to navigate and ENTER to select!");
-
+int selectOption(){
 	// Menu navigation 
-	x_vec = 15;
-	y_vec = 10;
+	int x_vec = 15;
+	int y_vec = 10;
 	short int menu_start = 15;
 	short int menu_end = 17;
 	move(x_vec, y_vec); // Move cursor to first option
@@ -155,15 +158,95 @@ int printMenu(void){
 	}
 }
 
+int startGame(void){
+	int snake_x = 13;
+	int snake_y = 25;
+
+	// Draw frame
+	clear();
+	buildBlock(50, 25);
+
+	// Waits for user
+	move(8, 12);
+	addstr("Press something to start!");
+	move(snake_x, snake_y);
+	getch();
+
+	// Build snake
+	struct snakeBuilder{
+		int x_coord;
+		int y_coord;
+		int past_x;
+		int past_y;
+	};
+
+	struct snakeBuilder snake[120];
+	snake[0].x_coord = snake_x;
+	snake[0].y_coord = snake_y;
+	snake[0].past_x = snake[0].x_coord;
+	snake[0].past_y = snake[0].y_coord;
+
+	// Initialize game
+	int *dir;
+	*dir = UP;
+
+	do{
+		// Wait user inpit for 1 second
+		timeout(500);
+		int key = getch();
+		timeout(-1);
+
+		// Print snake
+		if (key != ERR)
+			getSnakeDir(key, dir);
+		move(snake[0].x_coord, snake[0].y_coord);
+		addstr("#");
+
+		// Move snake
+		++snake[0].x_coord;
+
+	} while(1);
+
+	return 0;
+}
+	
+int mainMenu(void){
+	int x_vec = 11,
+	    y_vec = 10;
+
+	// Draw frame
+	clear();
+	buildBlock(80, 28);
+	// Parameters tell where to draw snake
+	printSnake(5, 10);
+	// Draw the menu header
+	// drawTitle(30, 10);
+	move(++x_vec, y_vec);
+	addstr("Welcome to cSnakeGame!!");
+	move(++x_vec, y_vec);
+	addstr("-----------------------");
+	move(++x_vec, y_vec);
+	addstr("Choose an option:");
+	move(++x_vec, y_vec);
+	addstr("1) Start game");
+	move(++x_vec, y_vec);
+	addstr("2) Credits");
+	move(++x_vec, y_vec);
+	addstr("3) Exit");
+	move(++x_vec, y_vec);
+	move(++x_vec, y_vec);
+	addstr("TIP: use W and S arrow to navigate and ENTER to select!");
+
+	return selectOption();
+}
+
 int main(void){
 	// Start main menu
 	initscr();
-	switch(printMenu()){
+	switch(mainMenu()){
 		case 15:
 			// Start game
-			clear();
-			addstr("Game started!");
-			getch();
+			startGame();
 			break;
 		case 16:
 			// Show credits
