@@ -39,7 +39,7 @@ OK - Credits screen
 OK - Exit button/screen
 
 ## Ingame-features
-- Implement the snake movement using WASD
+UNCOMPLETE - Implement the snake movement using WASD
 - Apples to spawn in random places in-frame
 - Score for each apple fed (GUI)
 - Increase snake length for each apple fed (GUI)
