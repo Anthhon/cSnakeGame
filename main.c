@@ -24,7 +24,7 @@ void printName(int x_vec, int y_vec){
 }
 
 // Parameters tell where to draw the snake
-void print_snake(int x_vec, int y_vec){
+void printSnake(int x_vec, int y_vec){
 	move(x_vec, y_vec);
 	addstr("             ____");
 	move(++x_vec, y_vec);
@@ -40,7 +40,7 @@ void print_snake(int x_vec, int y_vec){
 	return;
 }
 
-void build_block(unsigned short SIZE_H, unsigned short SIZE_V){
+void buildBlock(unsigned short SIZE_H, unsigned short SIZE_V){
 	const short unsigned BOX_SIZE_H = SIZE_H;
 	const short unsigned BOX_SIZE_V = SIZE_V;
 	char BOX_CHAR = '#';
@@ -60,13 +60,13 @@ void build_block(unsigned short SIZE_H, unsigned short SIZE_V){
 	return;
 }
 
-int exit_menu(void){
+int exitMenu(void){
 	int x_vec = 5,
 	    y_vec = 10;
 
 	// Print menu
 	clear();
-	build_block(52, 10);
+	buildBlock(52, 10);
 	move(x_vec, y_vec);
 
 	// Ask question
@@ -78,12 +78,12 @@ int exit_menu(void){
 		return 1;
 	else if (key == 'N' || key == 'n')
 		return 2;
-	else exit_menu();
+	else exitMenu();
 }
 
-void credits_menu(void){
+void creditsMenu(void){
 	clear();
-	build_block(54, 20);
+	buildBlock(54, 20);
 
 	// Print my name
 	int x_vec = 6, y_vec = 10;
@@ -107,7 +107,7 @@ void credits_menu(void){
 	return;
 }
 
-void get_snake_dir(int input, int *direction){
+void getSnakeDir(int input, int *direction){
 	switch(input){
 		case 'w':
 			*direction = UP;
@@ -125,7 +125,7 @@ void get_snake_dir(int input, int *direction){
 	return;
 }
 
-int select_option(){
+int selectOption(){
 	// Menu navigation 
 	int x_vec = 15;
 	int y_vec = 10;
@@ -158,13 +158,13 @@ int select_option(){
 	}
 }
 
-int start_game(void){
+int startGame(void){
 	int snake_x = 13;
 	int snake_y = 25;
 
 	// Draw frame
 	clear();
-	build_block(50, 25);
+	buildBlock(50, 25);
 
 	// Waits for user
 	move(8, 12);
@@ -198,7 +198,7 @@ int start_game(void){
 
 		// Print snake
 		if (key != ERR)
-			get_snake_dir(key, dir);
+			getSnakeDir(key, dir);
 		move(snake[0].x_coord, snake[0].y_coord);
 		addstr("#");
 
@@ -210,15 +210,15 @@ int start_game(void){
 	return 0;
 }
 	
-int main_menu(void){
+int mainMenu(void){
 	int x_vec = 11,
 	    y_vec = 10;
 
 	// Draw frame
 	clear();
-	build_block(80, 28);
+	buildBlock(80, 28);
 	// Parameters tell where to draw snake
-	print_snake(5, 10);
+	printSnake(5, 10);
 	// Draw the menu header
 	// drawTitle(30, 10);
 	move(++x_vec, y_vec);
@@ -237,24 +237,24 @@ int main_menu(void){
 	move(++x_vec, y_vec);
 	addstr("TIP: use W and S arrow to navigate and ENTER to select!");
 
-	return select_option();
+	return selectOption();
 }
 
 int main(void){
 	// Start main menu
 	initscr();
-	switch(main_menu()){
+	switch(mainMenu()){
 		case 15:
 			// Start game
-			start_game();
+			startGame();
 			break;
 		case 16:
 			// Show credits
-			credits_menu();
+			creditsMenu();
 			break;
 		case 17:
 			// Exit message
-			if (exit_menu() == 2)
+			if (exitMenu() == 2)
 				main();
 			break;
 	}
