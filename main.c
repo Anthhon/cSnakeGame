@@ -222,25 +222,27 @@ int start_game(void){
 		int past_x;
 		int past_y;
 	} snakeBuilder;
-	snakeBuilder snake[120];
+	snakeBuilder *snake[120];
+	/* Allocate memory for all snake pointers */
+	for (int i = 0; i < 120; ++i){
+		snake[i] = malloc(sizeof(snakeBuilder));
+	}
 
 	/* Fill snake struct coords 
 	 * i choose -1 to represent a 'non-used' coord in the snake body
 	 * using this information i can see when snake body ends*/
-	for (int i = 0; i <= 120; ++i){
-		snake[0].x_coord = -1;
-		snake[0].y_coord = -1;
-		snake[0].past_x = -1;
-		snake[0].past_y = -1;
+	for (int i = 1; i < 120; ++i){
+		snake[i]->x_coord = -1;
+		snake[i]->y_coord = -1;
+		snake[i]->past_x = -1;
+		snake[i]->past_y = -1;
 	}
 
 	/* Set snake head position */
-	snake[0].x_coord = snake_x;
-	snake[0].y_coord = snake_y;
-	snake[0].past_x = snake[0].x_coord;
-	snake[0].past_y = snake[0].y_coord;
-
-	
+	snake[0]->x_coord = snake_x;
+	snake[0]->y_coord = snake_y;
+	snake[0]->past_x = snake[0]->x_coord;
+	snake[0]->past_y = snake[0]->y_coord;
 
 	/* Initialize game */
 	int *dir = malloc(sizeof(int));
@@ -268,61 +270,64 @@ int start_game(void){
 		 * - Move cursor out screen 
 		 */
 		if (*dir == UP){
-			move(snake[0].past_x, snake[0].past_y);
+			move(snake[0]->past_x, snake[0]->past_y);
 			addstr(" ");
 
-			move(snake[0].x_coord, snake[0].y_coord);
+			move(snake[0]->x_coord, snake[0]->y_coord);
 			addstr("#");
 
-			snake[0].past_x = snake[0].x_coord;
-			snake[0].past_y = snake[0].y_coord;
+			snake[0]->past_x = snake[0]->x_coord;
+			snake[0]->past_y = snake[0]->y_coord;
 
-			--snake[0].x_coord;
+			--snake[0]->x_coord;
 
 			move(26, 0);
 		} else if (*dir == DOWN){
-			move(snake[0].past_x, snake[0].past_y);
+			move(snake[0]->past_x, snake[0]->past_y);
 			addstr(" ");
 
-			move(snake[0].x_coord, snake[0].y_coord);
+			move(snake[0]->x_coord, snake[0]->y_coord);
 			addstr("#");
 
-			snake[0].past_x = snake[0].x_coord;
-			snake[0].past_y = snake[0].y_coord;
+			snake[0]->past_x = snake[0]->x_coord;
+			snake[0]->past_y = snake[0]->y_coord;
 
-			++snake[0].x_coord;
+			++snake[0]->x_coord;
 
 			move(26, 0);
 		} else if (*dir == RIGHT){
-			move(snake[0].past_x, snake[0].past_y);
+			move(snake[0]->past_x, snake[0]->past_y);
 			addstr(" ");	
 
-			move(snake[0].x_coord, snake[0].y_coord);
+			move(snake[0]->x_coord, snake[0]->y_coord);
 			addstr("#");
 
-			snake[0].past_x = snake[0].x_coord;
-			snake[0].past_y = snake[0].y_coord;
+			snake[0]->past_x = snake[0]->x_coord;
+			snake[0]->past_y = snake[0]->y_coord;
 
-			++snake[0].y_coord;
+			++snake[0]->y_coord;
 
 			move(26, 0);
 		} else if (*dir == LEFT){
-			move(snake[0].past_x, snake[0].past_y);
+			move(snake[0]->past_x, snake[0]->past_y);
 			addstr(" ");
 
-			move(snake[0].x_coord, snake[0].y_coord);
+			move(snake[0]->x_coord, snake[0]->y_coord);
 			addstr("#");
 
-			snake[0].past_x = snake[0].x_coord;
-			snake[0].past_y = snake[0].y_coord;
+			snake[0]->past_x = snake[0]->x_coord;
+			snake[0]->past_y = snake[0]->y_coord;
 
-			--snake[0].y_coord;
+			--snake[0]->y_coord;
 
 			move(26, 0);
 		}
 	} while(1);
 
 	/* Free memory */
+	for (int i = 0; i < 120; ++i){
+		free(snake[i]);
+	}
 	free(dir);
 
 	return 0;
