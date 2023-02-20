@@ -1,6 +1,7 @@
 #include<curses.h>
 #include<stdio.h>
 #include<unistd.h>
+#include<stdlib.h>
 
 #define UP 1
 #define RIGHT 2
@@ -9,7 +10,7 @@
 
 int main(void);
 
-void printName(int x_vec, int y_vec){
+void print_name(int x_vec, int y_vec){
 	move(x_vec, y_vec);
 	addstr(" _____       _   _");
 	move(++x_vec, y_vec);
@@ -23,7 +24,7 @@ void printName(int x_vec, int y_vec){
 	return;
 }
 
-// Parameters tell where to draw the snake
+/* Parameters tell where to draw the snake */
 void print_snake(int x_vec, int y_vec){
 	move(x_vec, y_vec);
 	addstr("             ____");
@@ -60,79 +61,14 @@ void build_block(unsigned short SIZE_H, unsigned short SIZE_V){
 	return;
 }
 
-int exit_menu(void){
-	int x_vec = 5,
-	    y_vec = 10;
-
-	// Print menu
-	clear();
-	build_block(52, 10);
-	move(x_vec, y_vec);
-
-	// Ask question
-	addstr("You really want to quit? (Y/N)");
-	move(++x_vec, y_vec);
-	int key = getch();
-
-	if (key == 'Y' || key == 'y')
-		return 1;
-	else if (key == 'N' || key == 'n')
-		return 2;
-	else exit_menu();
-}
-
-void credits_menu(void){
-	clear();
-	build_block(54, 20);
-
-	// Print my name
-	int x_vec = 6, y_vec = 10;
-	move(x_vec, y_vec);
-	addstr("Game made by:");
-	move(++x_vec, y_vec);
-	move(x_vec, y_vec);
-	printName(x_vec, y_vec);
-
-	// Print contributors list
-	x_vec = 13;
-	move(x_vec, y_vec);
-	addstr("Contributors:");
-	move(++x_vec, y_vec);
-	addstr("No one yet :(");
-	move(++x_vec, y_vec);
-	getch();
-
-	// Return to menu
-	main();
-	return;
-}
-
-void get_snake_dir(int input, int *direction){
-	switch(input){
-		case 'w':
-			*direction = UP;
-			break;
-		case 's':
-			*direction = DOWN;
-			break;
-		case 'a':
-			*direction = LEFT;
-			break;
-		case 'd':
-			*direction = RIGHT;
-			break;
-	}
-	return;
-}
-
 int select_option(){
-	// Menu navigation 
+	/* Menu navigation */
 	int x_vec = 15;
 	int y_vec = 10;
 	short int menu_start = 15;
 	short int menu_end = 17;
-	move(x_vec, y_vec); // Move cursor to first option
-	noecho(); // Avoid overwritting in screen
+	move(x_vec, y_vec); /* Move cursor to first option */
+	noecho(); /* Avoid overwritting in screen */
 	
 	while(true){
 		int key = getch();
@@ -151,61 +87,243 @@ int select_option(){
 					move(x_vec, y_vec);
 				}
 				break;
-			case '\n':
+			/* '\n' refeers to ENTER keybutton */
+			case '\n': 
 				return x_vec;
 				break;
 		}
 	}
 }
 
+int exit_menu(void){
+	int x_vec = 5,
+	    y_vec = 10;
+
+	/* Print menu */
+	clear();
+	build_block(52, 10);
+	move(x_vec, y_vec);
+
+	/* Ask question */
+	addstr("You really want to quit? (Y/N)");
+	move(++x_vec, y_vec);
+	int key = getch();
+
+	if (key == 'Y' || key == 'y')
+		return 1;
+	else if (key == 'N' || key == 'n')
+		return 2;
+	else exit_menu();
+}
+
+void credits_menu(void){
+	clear();
+	build_block(54, 20);
+
+	/* Print my name */
+	int x_vec = 6, y_vec = 10;
+	move(x_vec, y_vec);
+	addstr("Game made by:");
+	move(++x_vec, y_vec);
+	move(x_vec, y_vec);
+	print_name(x_vec, y_vec);
+
+	/* Print contributors list */
+	x_vec = 13;
+	move(x_vec, y_vec);
+	addstr("Contributors:");
+	move(++x_vec, y_vec);
+	addstr("No one yet :(");
+	move(++x_vec, y_vec);
+	getch();
+
+	/* Return to menu */
+	main();
+	return;
+}
+
+void convert_char_to_lower(int *key){
+	*key += 32;
+}
+
+int char_is_upper(int *key){
+	if (64 < *key > 91)
+		return true;
+	else return false;
+}
+
+void get_snake_dir(int input, int *direction){
+
+	int *key = malloc(sizeof(int));
+	*key = input;
+
+	if (char_is_upper(key))
+		convert_char_to_lower(key);
+	
+	/* Handle invalid movements */
+	if (*direction == UP && input == DOWN || *direction == DOWN && input == UP)
+		return;
+	if (*direction == LEFT && input == RIGHT || *direction == RIGHT && input == LEFT)
+		return;
+
+	switch(*key){
+		case 'w':
+			*direction = UP;
+			/* Debugging purpose */
+			move(28, 0);
+			addstr("console: dir set to UP   ");
+			break;
+		case 's':
+			*direction = DOWN;
+			/* Debugging purpose */
+			move(28, 0);
+			addstr("console: dir set to DOWN ");
+			break;
+		case 'a':
+			*direction = LEFT;
+			/* Debugging purpose */
+			move(28, 0);
+			addstr("console: dir set to LEFT ");
+			break;
+		case 'd':
+			*direction = RIGHT;
+			/* Debugging purpose */
+			move(28, 0);
+			addstr("console: dir set to RIGHT");
+			break;
+	}
+
+	/* Free memory */
+	free(key);
+
+	return;
+}
+
 int start_game(void){
 	int snake_x = 13;
 	int snake_y = 25;
 
-	// Draw frame
+	/* Draw frame */
 	clear();
 	build_block(50, 25);
 
-	// Waits for user
+	/* Waits for user */
 	move(8, 12);
 	addstr("Press something to start!");
-	move(snake_x, snake_y);
 	getch();
+	move(8, 12);
+	addstr("                         "); /* Erase text */
+	move(26, 0);
 
-	// Build snake
-	struct snakeBuilder{
+	/* Build snake */
+	typedef struct snakeBody{
 		int x_coord;
 		int y_coord;
 		int past_x;
 		int past_y;
-	};
+	} snakeBuilder;
+	snakeBuilder snake[120];
 
-	struct snakeBuilder snake[120];
+	/* Fill snake struct coords 
+	 * i choose -1 to represent a 'non-used' coord in the snake body
+	 * using this information i can see when snake body ends*/
+	for (int i = 0; i <= 120; ++i){
+		snake[0].x_coord = -1;
+		snake[0].y_coord = -1;
+		snake[0].past_x = -1;
+		snake[0].past_y = -1;
+	}
+
+	/* Set snake head position */
 	snake[0].x_coord = snake_x;
 	snake[0].y_coord = snake_y;
 	snake[0].past_x = snake[0].x_coord;
 	snake[0].past_y = snake[0].y_coord;
 
-	// Initialize game
-	int *dir;
-	*dir = UP;
+	
+
+	/* Initialize game */
+	int *dir = malloc(sizeof(int));
+	*dir = LEFT;
 
 	do{
-		// Wait user inpit for 1 second
+		/* Wait user input for 1 second */
 		timeout(500);
 		int key = getch();
 		timeout(-1);
 
-		// Print snake
+		/* Update snake direction */
 		if (key != ERR)
 			get_snake_dir(key, dir);
-		move(snake[0].x_coord, snake[0].y_coord);
-		addstr("#");
 
-		// Move snake
-		++snake[0].x_coord;
+		/* Handle snake movement
+		 *
+		 * The snake movement follow these steps:
+		 * - Erases last snake position
+		 * - Move cursor to new snake coord
+		 * - Print snake head
+		 * - Assign past snake head coord
+		 * - Updates snake new coord based in user input
+		 * - TODO Update snake body
+		 * - Move cursor out screen 
+		 */
+		if (*dir == UP){
+			move(snake[0].past_x, snake[0].past_y);
+			addstr(" ");
 
+			move(snake[0].x_coord, snake[0].y_coord);
+			addstr("#");
+
+			snake[0].past_x = snake[0].x_coord;
+			snake[0].past_y = snake[0].y_coord;
+
+			--snake[0].x_coord;
+
+			move(26, 0);
+		} else if (*dir == DOWN){
+			move(snake[0].past_x, snake[0].past_y);
+			addstr(" ");
+
+			move(snake[0].x_coord, snake[0].y_coord);
+			addstr("#");
+
+			snake[0].past_x = snake[0].x_coord;
+			snake[0].past_y = snake[0].y_coord;
+
+			++snake[0].x_coord;
+
+			move(26, 0);
+		} else if (*dir == RIGHT){
+			move(snake[0].past_x, snake[0].past_y);
+			addstr(" ");	
+
+			move(snake[0].x_coord, snake[0].y_coord);
+			addstr("#");
+
+			snake[0].past_x = snake[0].x_coord;
+			snake[0].past_y = snake[0].y_coord;
+
+			++snake[0].y_coord;
+
+			move(26, 0);
+		} else if (*dir == LEFT){
+			move(snake[0].past_x, snake[0].past_y);
+			addstr(" ");
+
+			move(snake[0].x_coord, snake[0].y_coord);
+			addstr("#");
+
+			snake[0].past_x = snake[0].x_coord;
+			snake[0].past_y = snake[0].y_coord;
+
+			--snake[0].y_coord;
+
+			move(26, 0);
+		}
 	} while(1);
+
+	/* Free memory */
+	free(dir);
 
 	return 0;
 }
@@ -214,13 +332,13 @@ int main_menu(void){
 	int x_vec = 11,
 	    y_vec = 10;
 
-	// Draw frame
+	/* Draw frame */
 	clear();
 	build_block(80, 28);
-	// Parameters tell where to draw snake
+	/* Parameters tell where to draw snake */
 	print_snake(5, 10);
-	// Draw the menu header
-	// drawTitle(30, 10);
+	/* Draw the menu header */
+	/* drawTitle(30, 10); */
 	move(++x_vec, y_vec);
 	addstr("Welcome to cSnakeGame!!");
 	move(++x_vec, y_vec);
@@ -241,25 +359,25 @@ int main_menu(void){
 }
 
 int main(void){
-	// Start main menu
+	/* Start main menu */
 	initscr();
 	switch(main_menu()){
 		case 15:
-			// Start game
+			/* Start game */
 			start_game();
 			break;
 		case 16:
-			// Show credits
+			/* Show credits */
 			credits_menu();
 			break;
 		case 17:
-			// Exit message
+			/* Exit message */
 			if (exit_menu() == 2)
 				main();
 			break;
 	}
 
-	// Exit game
+	/* Exit game */
 	endwin();
 	return 0;
 }
