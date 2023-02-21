@@ -22,6 +22,7 @@ Using GCC
     ./cSnakeGame
 
 # Requirements
+- Linux OS (Unfortunely code STILL doesn't works in Windows)
 - GCC compiler (Recommended)
 - Cmake
 - NCurses library
@@ -39,8 +40,8 @@ OK - Credits screen
 OK - Exit button/screen
 
 ## Ingame-features
-UNCOMPLETE - Implement the snake movement using WASD
-- Apples to spawn in random places in-frame
+OK - Implement the snake movement using WASD
+INCOMING - Apples to spawn in random places in-frame
 - Score for each apple fed (GUI)
 - Increase snake length for each apple fed (GUI)
 - Timer (GUI)

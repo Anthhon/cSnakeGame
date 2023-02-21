@@ -9,6 +9,7 @@
 #define DOWN 3
 #define LEFT 4
 
+#define SNAKE_BODY 'o'
 #define SNAKE_HEAD 'H'
 #define BLOCK_CHAR '#'
 #define SNAKE_MAX_SIZE 120
@@ -183,6 +184,12 @@ void init_snake(snake_builder *snake[]){
 	snake[0]->past_x = snake[0]->x_coord;
 	snake[0]->past_y = snake[0]->y_coord;
 
+	/* Add 1 snake body part */
+	snake[1]->x_coord = snake_x;
+	snake[1]->y_coord = +snake_y;
+	snake[1]->past_x = snake[1]->x_coord;
+	snake[1]->past_y = snake[1]->y_coord;
+
 	return;
 }
 
@@ -227,83 +234,70 @@ void get_snake_dir(int *input, int *direction){
 	return;
 }
 
-void move_snake(snake_builder *snake[], int *dir){
-	/* Handle snake movement
+void move_snake_body(snake_builder *snake[], int *dir){
+	for (int i = 1, last = 0; i < SNAKE_MAX_SIZE; ++i, ++last){
+		/* Detect snake body end */
+		if (snake[i]->x_coord == -1) break;
+
+		move(snake[i]->past_x, snake[i]->past_y);
+		addstr(" ");
+
+		move(snake[i]->x_coord, snake[i]->y_coord);
+		printw("%c", SNAKE_BODY);
+
+		snake[i]->past_x = snake[i]->x_coord;
+		snake[i]->past_y = snake[i]->y_coord;
+
+		snake[i]->x_coord = snake[last]->past_x;
+		snake[i]->y_coord = snake[last]->past_y;
+	}
+	move(26, 0);
+
+	return;
+}
+
+void move_snake_head(snake_builder *snake[], int *dir){
+	/* Handle snake head movement
 	 *
 	 * The snake movement follow these steps:
 	 * - Erases last snake position
 	 * - Move cursor to new snake coord
-	 * - Print snake head
-	 * - Assign past snake head coord
+	 * - Print snake body
+	 * - Assign past snake body coord
 	 * - Updates snake new coord based in user input
-	 * - TODO Update snake body
-	 * - Move cursor out screen 
-	 *
-	 * That is a big block of code, but i really don't
-	 * know what to do about it, srry :(
-	 */
-	if (*dir == UP){
-		move(snake[0]->past_x, snake[0]->past_y);
-		addstr(" ");
+	 * - Move cursor out screen */
 
-		move(snake[0]->x_coord, snake[0]->y_coord);
-		printw("%c", SNAKE_HEAD);
+	move(snake[0]->past_x, snake[0]->past_y);
+	addstr(" ");
 
-		snake[0]->past_x = snake[0]->x_coord;
-		snake[0]->past_y = snake[0]->y_coord;
+	move(snake[0]->x_coord, snake[0]->y_coord);
+	printw("%c", SNAKE_HEAD);
 
-		/* TODO: Update entire snake body
-		 *
-		 * Want to use a for loop to iterate beetween
-		 * all struct arrays and update actual coords
-		 * by the previous element past coords
-		 *
-		 * update_snake_body(&snake[0]); */
+	snake[0]->past_x = snake[0]->x_coord;
+	snake[0]->past_y = snake[0]->y_coord;
 
+	switch(*dir)
+	{
+	case UP:
 		--snake[0]->x_coord;
-
-		move(26, 0);
-	} else if (*dir == DOWN){
-		move(snake[0]->past_x, snake[0]->past_y);
-		addstr(" ");
-
-		move(snake[0]->x_coord, snake[0]->y_coord);
-		printw("%c", SNAKE_HEAD);
-
-		snake[0]->past_x = snake[0]->x_coord;
-		snake[0]->past_y = snake[0]->y_coord;
-
+		break;
+	case DOWN:
 		++snake[0]->x_coord;
-
-		move(26, 0);
-	} else if (*dir == RIGHT){
-		move(snake[0]->past_x, snake[0]->past_y);
-		addstr(" ");	
-
-		move(snake[0]->x_coord, snake[0]->y_coord);
-		printw("%c", SNAKE_HEAD);
-
-		snake[0]->past_x = snake[0]->x_coord;
-		snake[0]->past_y = snake[0]->y_coord;
-
-		++snake[0]->y_coord;
-
-		move(26, 0);
-	} else if (*dir == LEFT){
-		move(snake[0]->past_x, snake[0]->past_y);
-		addstr(" ");
-
-		move(snake[0]->x_coord, snake[0]->y_coord);
-		printw("%c", SNAKE_HEAD);
-
-		snake[0]->past_x = snake[0]->x_coord;
-		snake[0]->past_y = snake[0]->y_coord;
-
+		break;
+	case LEFT:
 		--snake[0]->y_coord;
-
-		move(26, 0);
+		break;
+	case RIGHT:
+		++snake[0]->y_coord;
+		break;
 	}
 	return;
+}
+
+void move_snake(snake_builder *snake[], int *dir){
+		move_snake_head(&snake[0], dir);
+		move_snake_body(&snake[0], dir);
+		return;
 }
 
 int start_game(void){
