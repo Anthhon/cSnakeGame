@@ -55,6 +55,10 @@ void print_snake(int x_coordinate, int y_coordinate){
 	return;
 }
 
+void build_apple(int block_size_h, int block_size_v){
+	return;
+}
+
 void build_block(unsigned short SIZE_H, unsigned short SIZE_V){
 
 	for (int x_coordinate = 0; x_coordinate <= SIZE_V; ++x_coordinate){
@@ -193,6 +197,18 @@ void init_snake(snake_builder *snake[]){
 	return;
 }
 
+void increase_snake_size(snake_builder*snake[]){
+	for (int i = 1, past = 0; i < SNAKE_MAX_SIZE; ++i, ++past){
+		if (snake[i]->x_coord == -1){
+			snake[i]->x_coord = snake[past]->past_x;
+			snake[i]->y_coord = snake[past]->past_y;
+			break;
+		}
+	}
+
+	return;
+}
+
 void get_snake_dir(int *input, int *direction){
 
 	if (isupper(*input))
@@ -294,16 +310,21 @@ void move_snake_head(snake_builder *snake[], int *dir){
 	return;
 }
 
-void move_snake(snake_builder *snake[], int *dir){
+void update_snake(snake_builder *snake[], int *dir){
 		move_snake_head(&snake[0], dir);
 		move_snake_body(&snake[0], dir);
 		return;
 }
 
 int start_game(void){
-		/* Draw frame */
+	/* Build scenario frame */
+	int block_size_h = 50,
+	    block_size_v = 25;
 	clear();
-	build_block(50, 25);
+	build_block(block_size_h, block_size_v);
+	/* This function should work without coordinates, it should generate
+	 * a random numbers beetween block map size and build an apple
+	 * build_apple(block_size_v, block_size_h);
 
 	/* Waits for user */
 	move(8, 12);
@@ -317,26 +338,32 @@ int start_game(void){
 	init_snake(&snake[0]);
 
 	/* Initialize game */
-	int *dir = malloc(sizeof(int));
-	*dir = LEFT;
+	int dir = LEFT;
+	int *dir_ptr = &dir;
 
 	do{
 		/* Wait user input for 1 second */
-		timeout(500);
+		timeout(420);
 		int key = getch();
 		timeout(-1);
 
+		
 		/* Update snake direction */
 		if (key != ERR)
-			get_snake_dir(&key, dir);
-		move_snake(&snake[0], dir);
+			get_snake_dir(&key, dir_ptr);
+		update_snake(&snake[0], dir_ptr);
+		/* TESTING 
+		 * Increase snake size when 'K' is pressed
+		if (key == 'j')
+			increase_snake_size(&snake[0]); */
+
 	} while(1);
 
 	/* Free memory */
 	for (int i = 0; i < SNAKE_MAX_SIZE; ++i){
 		free(snake[i]);
 	}
-	free(dir);
+	free(dir_ptr);
 
 	return 0;
 }
