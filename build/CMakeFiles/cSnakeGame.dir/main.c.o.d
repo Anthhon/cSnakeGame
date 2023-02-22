@@ -60,4 +60,9 @@ CMakeFiles/cSnakeGame.dir/main.c.o: \
  /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h /usr/include/ctype.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h
+ /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+ /home/anthony/Github/own-projects/cSnakeGame/./builder.h \
+ /usr/include/time.h /usr/include/x86_64-linux-gnu/bits/time.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+ /home/anthony/Github/own-projects/cSnakeGame/./snake.h

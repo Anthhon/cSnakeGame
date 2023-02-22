@@ -42,7 +42,7 @@ OK - Exit button/screen
 ## Ingame-features
 OK - Implement the snake movement using WASD
 OK - Increase size functionality
-INCOMING - Apples to spawn in random places in-frame
+OK - Apples to spawn in random places in-frame
 - Score for each apple fed (GUI)
 - Increase snake length for each apple fed (GUI)
 - Timer (GUI)

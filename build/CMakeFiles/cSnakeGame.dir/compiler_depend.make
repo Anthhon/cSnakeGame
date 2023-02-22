@@ -72,8 +72,22 @@ CMakeFiles/cSnakeGame.dir/main.c.o: ../main.c \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/ctype.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
-  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h
+  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+  ../builder.h \
+  /usr/include/time.h \
+  /usr/include/x86_64-linux-gnu/bits/time.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+  ../snake.h
 
+
+../snake.h:
+
+/usr/include/x86_64-linux-gnu/bits/time.h:
+
+/usr/include/time.h:
+
+../builder.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
 
@@ -85,6 +99,8 @@ CMakeFiles/cSnakeGame.dir/main.c.o: ../main.c \
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
 
 /usr/include/features.h:
@@ -94,6 +110,8 @@ CMakeFiles/cSnakeGame.dir/main.c.o: ../main.c \
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h:
 
