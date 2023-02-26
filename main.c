@@ -14,33 +14,31 @@ int main(void);
 
 int select_option(){
 	/* Menu navigation */
-	int x_coordinate = 15;
-	int y_coordinate = 10;
+	int x_coordinate = 15,
+	    y_coordinate = 10;
+
 	move(x_coordinate, y_coordinate); /* Move cursor to first option */
 	noecho(); /* Avoid overwritting in screen */
 	
 	while(true){
 		int key = getch();
+
 		switch(key){
 			case 'w':
 				move(--x_coordinate, y_coordinate);
-				if (x_coordinate < MENU_START){
+				if (x_coordinate < MENU_START)
 					x_coordinate = MENU_END;
-					move(x_coordinate, y_coordinate);
-				}
 				break;
 			case 's':
 				move(++x_coordinate, y_coordinate);
-				if (x_coordinate > MENU_END){
+				if (x_coordinate > MENU_END)
 					x_coordinate = MENU_START;
-					move(x_coordinate, y_coordinate);
-				}
 				break;
-			/* '\n' refeers to ENTER keybutton */
 			case '\n': 
 				return x_coordinate;
 				break;
 		}
+		move(x_coordinate, y_coordinate);
 	}
 }
 
@@ -56,25 +54,28 @@ int exit_menu(void){
 	/* Ask question */
 	addstr("You really want to quit? (Y/N)");
 	move(++x_coordinate, y_coordinate);
-	int key = getch();
 
-	if (key == 'Y' || key == 'y')
-		return 1;
-	else if (key == 'N' || key == 'n')
-		return 2;
-	else exit_menu();
+	while(1){
+		int key = getch();
+		if (key == 'Y' || key == 'y')
+			return 1;
+		else if (key == 'N' || key == 'n')
+			return 2;
+	}
 }
 
 void credits_menu(void){
+	/* Print menu */
 	clear();
 	build_block(54, 20);
 
 	/* Print my name */
-	int x_coordinate = 6, y_coordinate = 10;
+	int x_coordinate = 6,
+	    y_coordinate = 10;
+
 	move(x_coordinate, y_coordinate);
 	addstr("Game made by:");
 	move(++x_coordinate, y_coordinate);
-	move(x_coordinate, y_coordinate);
 	print_name(x_coordinate, y_coordinate);
 
 	/* Print contributors list */
@@ -99,7 +100,7 @@ int start_game(void){
 	clear();
 	build_block(block_size_h, block_size_v);
 
-	/* Waits for user */
+	/* Waits for player */
 	move(8, 12);
 	addstr("Press something to start!");
 	getch();
@@ -114,8 +115,8 @@ int start_game(void){
 	int dir = LEFT;
 	int *dir_ptr = &dir;
 
-	/* This function should work without coordinates, it should generate
-	 * a random numbers beetween block map size and build an apple */
+	/* It should generate a random numbers beetween
+	 * block map size and build an apple */
 	build_apple(block_size_v, block_size_h);
 	move(26, 0); /* Avoid mouse in-screen delay */
 
@@ -124,23 +125,17 @@ int start_game(void){
 		timeout(420);
 		int key = getch();
 		timeout(-1);
-
-		
 		/* Update snake direction */
 		if (key != ERR)
 			get_snake_dir(&key, dir_ptr);
+		/* Check if next position collides with something */
+		check_collision(snake[0]->x_coord, snake[0]->y_coord, &snake[0]);
 		update_snake(&snake[0], dir_ptr);
-		/* TESTING 
-		 * Increase snake size when 'K' is pressed
-		if (key == 'j')
-			increase_snake_size(&snake[0]); */
-
 	} while(1);
 
-	/* Free memory */
-	for (int i = 0; i < SNAKE_MAX_SIZE; ++i){
+	/* Free snake body memory*/
+	for (int i = 0; i < SNAKE_MAX_SIZE; ++i)
 		free(snake[i]);
-	}
 	free(dir_ptr);
 
 	return 0;

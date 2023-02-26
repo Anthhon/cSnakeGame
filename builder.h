@@ -48,11 +48,15 @@ void print_snake(int x_coordinate, int y_coordinate){
 
 void build_apple(int max_size_x, int max_size_y){
 	/* Seeds the random generator */
-	srand(time(NULL)); 
-	int min_block_size = 2;
-	int random_coord_x = rand() % max_size_x + min_block_size;
-	int random_coord_y = rand() % max_size_y + min_block_size;
+	srand(time(0)); 
+	int min_block_size = 2,
+	    random_coord_x = rand() % max_size_x,
+	    random_coord_y = rand() % max_size_y;
 
+	/* Avoid apple being placed in walls */
+	if (random_coord_x == 0) ++random_coord_x;
+	if (random_coord_y == 0) ++random_coord_y;
+	
 	move(random_coord_x, random_coord_y);
 	printw("%c", APPLE_CHAR);
 

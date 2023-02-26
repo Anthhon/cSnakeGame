@@ -10,17 +10,20 @@
 #define SNAKE_BODY 'o'
 #define SNAKE_HEAD 'H'
 
+#define BLOCK_CHAR '#'
+#define APPLE_CHAR '*'
+
 typedef struct snake_body{
-	int x_coord;
-	int y_coord;
-	int past_x;
-	int past_y;
+	int x_coord,
+	    y_coord,
+	    past_x,
+	    past_y;
 } snake_builder;
 
 void init_snake(snake_builder *snake[]){
 	/* Mid-screen default position */
-	int snake_x = 13;
-	int snake_y = 25;
+	int snake_x = 13,
+	    snake_y = 25;
 
 	/* Allocate memory for all snake pointers */
 	for (int i = 0; i < SNAKE_MAX_SIZE; ++i){
@@ -43,7 +46,7 @@ void init_snake(snake_builder *snake[]){
 	snake[0]->past_x = snake[0]->x_coord;
 	snake[0]->past_y = snake[0]->y_coord;
 
-	/* Add 1 snake body part */
+	/* Add first snake body part */
 	snake[1]->x_coord = snake_x;
 	snake[1]->y_coord = +snake_y;
 	snake[1]->past_x = snake[1]->x_coord;
@@ -53,94 +56,85 @@ void init_snake(snake_builder *snake[]){
 }
 
 void increase_snake_size(snake_builder*snake[]){
-	for (int i = 1, past = 0; i < SNAKE_MAX_SIZE; ++i, ++past){
-		if (snake[i]->x_coord == -1){
-			snake[i]->x_coord = snake[past]->past_x;
-			snake[i]->y_coord = snake[past]->past_y;
+	int body_index = 1;
+	int prev_body_index = 0;
+
+	while (body_index < SNAKE_MAX_SIZE){
+		/* Add a new segment when finds the snake body end */
+		if (snake[body_index]->x_coord == -1){
+			snake[body_index]->x_coord = snake[prev_body_index]->past_x;
+			snake[body_index]->y_coord = snake[prev_body_index]->past_y;
 			break;
 		}
+		++body_index;
+		++prev_body_index;
 	}
 
 	return;
 }
 
 void get_snake_dir(int *input, int *direction){
-
+	/* Avoid CAPSLOCK pressed errors*/
 	if (isupper(*input))
 		convert_char_to_lower(input);
 	
-	/* Handle invalid movements */
+	/* Handle invalid movements
 	if (*direction == UP && *input == DOWN || *direction == DOWN && *input == UP)
 		return;
 	if (*direction == LEFT && *input == RIGHT || *direction == RIGHT && *input == LEFT)
 		return;
+	 */
 
-	switch(*input){
-		case 'w':
-			*direction = UP;
-			/* Debugging purpose */
-			move(28, 0);
-			addstr("console: dir set to UP   ");
-			break;
-		case 's':
-			*direction = DOWN;
-			/* Debugging purpose */
-			move(28, 0);
-			addstr("console: dir set to DOWN ");
-			break;
-		case 'a':
-			*direction = LEFT;
-			/* Debugging purpose */
-			move(28, 0);
-			addstr("console: dir set to LEFT ");
-			break;
-		case 'd':
-			*direction = RIGHT;
-			/* Debugging purpose */
-			move(28, 0);
-			addstr("console: dir set to RIGHT");
-			break;
+	if (*input == 'w') *direction = UP;
+	if (*input == 's') *direction = DOWN;
+	if (*input == 'a') *direction = LEFT;
+	if (*input == 'd') *direction = RIGHT;
+
+	return;
+}
+
+void check_collision(int x_coord, int y_coord, snake_builder *snake[]){
+	/* Extract the character in the given position */
+	char next_position_char = mvinch(x_coord, y_coord) & A_CHARTEXT;
+	
+	if (next_position_char == APPLE_CHAR){
+		increase_snake_size(&snake[0]);
+		build_apple(25, 50);
 	}
+	/* Should redirect player to a "YOU LOSE" screen in future */
+	if (next_position_char == BLOCK_CHAR) return;
 
 	return;
 }
 
 void move_snake_body(snake_builder *snake[], int *dir){
-	for (int i = 1, last = 0; i < SNAKE_MAX_SIZE; ++i, ++last){
-		/* Detect snake body end */
-		if (snake[i]->x_coord == -1) break;
+	int body_index = 1;
+	int prev_body_index = 0;
 
-		move(snake[i]->past_x, snake[i]->past_y);
+	/* Search the last used body segment of snake */
+	while (body_index < SNAKE_MAX_SIZE && snake[body_index]->x_coord != -1){
+		/* Erase the last body segment */
+		move(snake[body_index]->past_x, snake[body_index]->past_y);
 		addstr(" ");
 
-		move(snake[i]->x_coord, snake[i]->y_coord);
+		move(snake[body_index]->x_coord, snake[body_index]->y_coord);
 		printw("%c", SNAKE_BODY);
 
-		snake[i]->past_x = snake[i]->x_coord;
-		snake[i]->past_y = snake[i]->y_coord;
+		/* Update the coordinates of the body segment */
+		snake[body_index]->past_x = snake[body_index]->x_coord;
+		snake[body_index]->past_y = snake[body_index]->y_coord;
+		snake[body_index]->x_coord = snake[prev_body_index]->past_x;
+		snake[body_index]->y_coord = snake[prev_body_index]->past_y;
 
-		snake[i]->x_coord = snake[last]->past_x;
-		snake[i]->y_coord = snake[last]->past_y;
+		++body_index;
+		++prev_body_index;
 	}
-	move(26, 0);
 
 	return;
 }
 
 void move_snake_head(snake_builder *snake[], int *dir){
-	/* Handle snake head movement
-	 *
-	 * The snake movement follow these steps:
-	 * - Erases last snake position
-	 * - Move cursor to new snake coord
-	 * - Print snake body
-	 * - Assign past snake body coord
-	 * - Updates snake new coord based in user input
-	 * - Move cursor out screen */
-
-	move(snake[0]->past_x, snake[0]->past_y);
-	addstr(" ");
-
+	/* Move snake body based in user input */
 	move(snake[0]->x_coord, snake[0]->y_coord);
 	printw("%c", SNAKE_HEAD);
 
@@ -162,11 +156,14 @@ void move_snake_head(snake_builder *snake[], int *dir){
 		++snake[0]->y_coord;
 		break;
 	}
+
 	return;
 }
 
 void update_snake(snake_builder *snake[], int *dir){
-		move_snake_head(&snake[0], dir);
-		move_snake_body(&snake[0], dir);
-		return;
+	move_snake_head(&snake[0], dir);
+	move_snake_body(&snake[0], dir);
+	/* Move cursor out the screen */
+	move(26, 0);
+	return;
 }
