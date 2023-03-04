@@ -13,6 +13,19 @@ void convert_char_to_lower(int *input){
 	*input += 32;
 }
 
+void clear_in_range(int x_range, int y_range){
+	/* Avoid erasing walls */
+	--y_range;
+	--x_range;
+
+	/* Clear each point beetween given range */
+	for (int y_coord = 1; y_coord <= y_range; ++y_coord)
+		for (int x_coord = 1; x_coord <= x_range; ++x_coord)
+			mvaddch(y_coord, x_coord, ' ');
+
+	return;
+}
+
 void print_name(int x_coordinate, int y_coordinate){
 	move(x_coordinate, y_coordinate);
 	addstr(" _____       _   _");
@@ -24,6 +37,22 @@ void print_name(int x_coordinate, int y_coordinate){
 	addstr("|__|__|_|_| |_| |_|_|___|_|_|_  |");
 	move(++x_coordinate, y_coordinate);
 	addstr("                            |___|");
+	return;
+}
+
+void print_you_lose(int x_coordinate, int y_coordinate){
+	move(x_coordinate, y_coordinate);
+	addstr(" __     __           _");
+	move(++x_coordinate, y_coordinate);
+	addstr(" \\ \\   / /          | |");
+	move(++x_coordinate, y_coordinate);
+	addstr("  \\ \\_/ /__  _   _  | | ___  ___  ___");
+	move(++x_coordinate, y_coordinate);
+	addstr("   \\   / _ \\| | | | | |/ _ \\/ __|/ _ \\");
+	move(++x_coordinate, y_coordinate);
+	addstr("    | | (_) | |_| | | | (_) \\__ \\  __/");
+	move(++x_coordinate, y_coordinate);
+	addstr("    |_|\\___/ \\__,_| |_|\\___/|___/\\___|");
 	return;
 }
 
@@ -47,7 +76,8 @@ void print_snake(int x_coordinate, int y_coordinate){
 }
 
 void build_apple(int max_size_x, int max_size_y){
-	/* Seeds the random generator */
+	/* Generate a random numbers beetween
+	 * block map size and build an apple */
 	srand(time(0)); 
 	int min_block_size = 2,
 	    random_coord_x = rand() % max_size_x,

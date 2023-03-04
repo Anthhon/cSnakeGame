@@ -93,18 +93,25 @@ void get_snake_dir(int *input, int *direction){
 	return;
 }
 
-void check_collision(int x_coord, int y_coord, snake_builder *snake[]){
+void check_collision(int x_coord, int y_coord, snake_builder *snake[], int *snake_alive){
 	/* Extract the character in the given position */
 	char next_position_char = mvinch(x_coord, y_coord) & A_CHARTEXT;
 	
-	if (next_position_char == APPLE_CHAR){
+	switch(next_position_char)
+	{
+	case BLOCK_CHAR:
+		*snake_alive = 0;
+		return;
+		break;
+	case APPLE_CHAR:
 		increase_snake_size(&snake[0]);
 		build_apple(25, 50);
+		return;
+		break;
+	default:
+		return;
+		break;
 	}
-	/* Should redirect player to a "YOU LOSE" screen in future */
-	if (next_position_char == BLOCK_CHAR) return;
-
-	return;
 }
 
 void move_snake_body(snake_builder *snake[], int *dir){

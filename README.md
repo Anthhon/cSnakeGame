@@ -46,13 +46,22 @@ OK - Exit button/screen
 ## Ingame-features
 
 OK - Implement the snake movement using WASD
+
 OK - Increase size functionality
+
 OK - Apples to spawn in random places in-frame
+
 OK - Increase snake length for each apple fed (GUI)
+
+OK - You lose screen appears when lost
+
 INCOMING - Score for each apple fed (GUI)
+
 - Timer (GUI)
+
 - Phrases to appear in GUI for some scores the user reach
-- Difficulty option (Game frame gets smaller)
+
+- Difficulty option (Game gets faster)
 
 ## Others
 

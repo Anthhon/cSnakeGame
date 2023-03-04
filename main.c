@@ -7,6 +7,9 @@
 #include"./builder.h"
 #include"./snake.h"
 
+#define TRUE 1
+#define FALSE 0
+
 #define MENU_START 15
 #define MENU_END 17
 
@@ -92,6 +95,23 @@ void credits_menu(void){
 	return;
 }
 
+void lose_menu(int screen_size_h, int screen_size_v){
+	/* Clean game screen */
+	build_block(screen_size_h, screen_size_v);
+	clear_in_range(screen_size_h, screen_size_v);
+
+	print_you_lose(8, 5);
+
+	move(16, 8);	
+	addstr("Press ENTER to return to main menu");
+	move(17, 9);	
+	addstr("Or another key to exit the game");
+
+	if (getch() == '\n') main();
+
+	return;
+}
+
 int start_game(void){
 	/* Build scenario frame */
 	int block_size_h = 50,
@@ -114,29 +134,33 @@ int start_game(void){
 	/* Initialize game */
 	int dir = LEFT;
 	int *dir_ptr = &dir;
+	int snake_alive = TRUE;
 
-	/* It should generate a random numbers beetween
-	 * block map size and build an apple */
+	
 	build_apple(block_size_v, block_size_h);
 	move(26, 0); /* Avoid mouse in-screen delay */
 
 	do{
-		/* Wait user input for 1 second */
+		/* Wait user input */
 		timeout(420);
 		int key = getch();
 		timeout(-1);
+
 		/* Update snake direction */
 		if (key != ERR)
 			get_snake_dir(&key, dir_ptr);
+
 		/* Check if next position collides with something */
-		check_collision(snake[0]->x_coord, snake[0]->y_coord, &snake[0]);
+		check_collision(snake[0]->x_coord, snake[0]->y_coord, &snake[0], &snake_alive);
 		update_snake(&snake[0], dir_ptr);
-	} while(1);
+	}
+	while(snake_alive);
 
 	/* Free snake body memory*/
 	for (int i = 0; i < SNAKE_MAX_SIZE; ++i)
 		free(snake[i]);
-	free(dir_ptr);
+
+	lose_menu(block_size_h, block_size_v);
 
 	return 0;
 }
