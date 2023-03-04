@@ -55,7 +55,7 @@ OK - Increase snake length for each apple fed (GUI)
 
 OK - You lose screen appears when lost
 
-INCOMING - Score for each apple fed (GUI)
+OK - Score for each apple fed (GUI)
 
 - Timer (GUI)
 
