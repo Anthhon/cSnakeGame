@@ -15,6 +15,20 @@
 
 int main(void);
 
+void update_score(){
+	/* Initialize at -1 so game starts with 0 */
+	static int score = -1;
+	++score;
+
+	/* Clean actual score */
+	move(4, 54);
+	addstr("             ");
+	move(4, 54);
+	printw("  Score: %i", score);
+
+	return;
+}
+
 int select_option(){
 	/* Menu navigation */
 	int x_coordinate = 15,
@@ -120,6 +134,14 @@ int start_game(void){
 	clear();
 	build_block(block_size_h, block_size_v);
 
+	/* Build game GUI frame */
+	build_block_in(17, 12, 53, 0);
+	update_score();
+	move(2, 57);
+	addstr("GAME STATS");
+	move(3, 56);
+	addstr("------------");
+
 	/* Waits for player */
 	move(8, 12);
 	addstr("Press something to start!");
@@ -131,11 +153,10 @@ int start_game(void){
 	snake_builder *snake[SNAKE_MAX_SIZE];
 	init_snake(&snake[0]);
 
-	/* Initialize game */
+	/* Initialize snake */
 	int dir = LEFT;
 	int *dir_ptr = &dir;
 	int snake_alive = TRUE;
-
 	
 	build_apple(block_size_v, block_size_h);
 	move(26, 0); /* Avoid mouse in-screen delay */
@@ -197,8 +218,13 @@ int main_menu(void){
 }
 
 int main(void){
-	/* Start main menu */
+	/* Initialize ncurses library */
 	initscr();
+	start_color();
+
+	init_color(COLOR_WHITE, 1000, 1000, 1000);
+	assume_default_colors(COLOR_WHITE, COLOR_BLACK);
+
 	switch(main_menu()){
 		case 15:
 			/* Start game */

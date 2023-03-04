@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<curses.h>
 
 #define SNAKE_MAX_SIZE 120
 
@@ -12,6 +13,9 @@
 
 #define BLOCK_CHAR '#'
 #define APPLE_CHAR '*'
+
+void update_score();
+
 
 typedef struct snake_body{
 	int x_coord,
@@ -106,6 +110,7 @@ void check_collision(int x_coord, int y_coord, snake_builder *snake[], int *snak
 	case APPLE_CHAR:
 		increase_snake_size(&snake[0]);
 		build_apple(25, 50);
+		update_score();
 		return;
 		break;
 	default:
@@ -168,8 +173,15 @@ void move_snake_head(snake_builder *snake[], int *dir){
 }
 
 void update_snake(snake_builder *snake[], int *dir){
+	/* Initiliaze color */
+	init_pair(1, COLOR_GREEN, COLOR_BLACK);
+	attron(COLOR_PAIR(1));
+
 	move_snake_head(&snake[0], dir);
 	move_snake_body(&snake[0], dir);
+
+	/* Turn color off */
+	attroff(COLOR_PAIR(1));
 	/* Move cursor out the screen */
 	move(26, 0);
 	return;

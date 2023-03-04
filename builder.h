@@ -76,6 +76,10 @@ void print_snake(int x_coordinate, int y_coordinate){
 }
 
 void build_apple(int max_size_x, int max_size_y){
+
+	/* Initialize color */
+	init_pair(2, COLOR_MAGENTA, COLOR_BLACK);
+
 	/* Generate a random numbers beetween
 	 * block map size and build an apple */
 	srand(time(0)); 
@@ -88,19 +92,37 @@ void build_apple(int max_size_x, int max_size_y){
 	if (random_coord_y == 0) ++random_coord_y;
 	
 	move(random_coord_x, random_coord_y);
+
+	attron(COLOR_PAIR(2));
 	printw("%c", APPLE_CHAR);
+	attroff(COLOR_PAIR(2));
 
 	return;
 }
 
-void build_block(unsigned short SIZE_H, unsigned short SIZE_V){
-	/* I little bit ugly but i don't know how to improve, feel free to refatorate :) */
-	for (int x_coordinate = 0; x_coordinate <= SIZE_V; ++x_coordinate)
-		for (int y_coordinate = 0; y_coordinate <= SIZE_H; ++y_coordinate){
-			if (x_coordinate == 0 || x_coordinate == SIZE_V || y_coordinate == 0 || y_coordinate == SIZE_H){
-				move(x_coordinate, y_coordinate);
+/* SIZE represent the block size to be built
+ * COORD represent where the block should be built */
+void build_block_in(int SIZE_H, int SIZE_V,
+		 int y_coord, int x_coord){
+
+	int x_end = SIZE_V + x_coord;
+	int y_end = SIZE_H + y_coord;
+
+	for (int x = x_coord; x <= x_end; ++x)
+		for (int y = y_coord; y <= y_end; ++y)
+			if (x == x_coord || x == x_end || y == y_coord || y == y_end){
+				move(x, y);
 				printw("%c", BLOCK_CHAR);
 			}
-		}
+
 	return;
 }
+
+void build_block(int SIZE_H, int SIZE_V){
+	/* Provide default coord values if not provided */
+	build_block_in(SIZE_H, SIZE_V, 0, 0);
+	return;
+}
+
+
+
