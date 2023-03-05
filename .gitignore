@@ -1,0 +1,29 @@
+###
+# This file contains file patterns that should be ignore by git
+# version control system
+###
+
+###############
+# Build files #
+###############
+
+./build/*
+
+#########
+# CMake #
+#########
+
+# Created with the help of
+# https://www.toptal.com/developers/gitignore/api/cmake
+
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
