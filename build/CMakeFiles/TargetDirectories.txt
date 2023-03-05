@@ -1,7 +1,0 @@
-/home/anthony/Github/own-projects/cSnakeGame/build/CMakeFiles/cSnakeGame.dir
-/home/anthony/Github/own-projects/cSnakeGame/build/CMakeFiles/edit_cache.dir
-/home/anthony/Github/own-projects/cSnakeGame/build/CMakeFiles/rebuild_cache.dir
-/home/anthony/Github/own-projects/cSnakeGame/build/CMakeFiles/list_install_components.dir
-/home/anthony/Github/own-projects/cSnakeGame/build/CMakeFiles/install.dir
-/home/anthony/Github/own-projects/cSnakeGame/build/CMakeFiles/install/local.dir
-/home/anthony/Github/own-projects/cSnakeGame/build/CMakeFiles/install/strip.dir
