@@ -1,4 +1,4 @@
-/* This header file contais some 'third-parties' functions
+/* This header file contains some 'third-parties' functions
  * who deal with secondary functions not directly related with
  * the game experience */
 
@@ -18,7 +18,7 @@ void clear_in_range(int x_range, int y_range){
 	--y_range;
 	--x_range;
 
-	/* Clear each point beetween given range */
+	/* Clear each point between given range */
 	for (int y_coord = 1; y_coord <= y_range; ++y_coord)
 		for (int x_coord = 1; x_coord <= x_range; ++x_coord)
 			mvaddch(y_coord, x_coord, ' ');
@@ -27,7 +27,7 @@ void clear_in_range(int x_range, int y_range){
 }
 
 void print_name(int x_coordinate, int y_coordinate){
-	/* Initiliaze color */
+	/* Initialize color */
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	attron(COLOR_PAIR(3));
 
@@ -93,7 +93,7 @@ void build_apple(int max_size_x, int max_size_y){
 	/* Make sound when player eats an apple */
 	printf("\a\n");
 
-	/* Generate a random numbers beetween
+	/* Generate a random numbers between
 	 * block map size and build an apple */
 	srand(time(0)); 
 	int min_block_size = 2,

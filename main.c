@@ -20,7 +20,7 @@ void update_score(){
 	static int score = -1;
 	++score;
 
-	/* Initiliaze color */
+	/* Initialize color */
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	attron(COLOR_PAIR(3));
 
@@ -41,7 +41,7 @@ int select_option(){
 	    y_coordinate = 10;
 
 	move(x_coordinate, y_coordinate); /* Move cursor to first option */
-	noecho(); /* Avoid overwritting in screen */
+	noecho(); /* Avoid overwriting in screen */
 	
 	while(true){
 		int key = getch();
@@ -74,7 +74,7 @@ int exit_menu(void){
 	build_block(52, 10);
 	move(x_coordinate, y_coordinate);
 
-	/* Initiliaze color */
+	/* Initialize color */
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	attron(COLOR_PAIR(3));
 
@@ -129,7 +129,7 @@ void lose_menu(int screen_size_h, int screen_size_v){
 
 	print_you_lose(8, 5);
 
-	/* Initiliaze color */
+	/* Initialize color */
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	attron(COLOR_PAIR(3));
 
@@ -161,7 +161,7 @@ int start_game(void){
 	move(3, 56);
 	addstr("------------");
 
-	/* Initiliaze color */
+	/* Initialize color */
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	attron(COLOR_PAIR(3));
 
@@ -233,7 +233,7 @@ int main_menu(void){
 	addstr("Choose an option:");
 	move(++x_coordinate, y_coordinate);
 
-	/* Initiliaze color */
+	/* Initialize color */
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	attron(COLOR_PAIR(3));
 
