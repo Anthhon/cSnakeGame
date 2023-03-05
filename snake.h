@@ -174,7 +174,7 @@ void move_snake_head(snake_builder *snake[], int *dir){
 }
 
 void update_snake(snake_builder *snake[], int *dir){
-	/* Initiliaze color */
+	/* Initialize color */
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	attron(COLOR_PAIR(1));
 
