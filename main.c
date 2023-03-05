@@ -20,11 +20,17 @@ void update_score(){
 	static int score = -1;
 	++score;
 
+	/* Initiliaze color */
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	attron(COLOR_PAIR(3));
+
 	/* Clean actual score */
 	move(4, 54);
 	addstr("             ");
 	move(4, 54);
 	printw("  Score: %i", score);
+
+	attroff(COLOR_PAIR(3));
 
 	return;
 }
@@ -68,9 +74,16 @@ int exit_menu(void){
 	build_block(52, 10);
 	move(x_coordinate, y_coordinate);
 
+	/* Initiliaze color */
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	attron(COLOR_PAIR(3));
+
 	/* Ask question */
 	addstr("You really want to quit? (Y/N)");
 	move(++x_coordinate, y_coordinate);
+
+	/* Turn-off color */
+	attroff(COLOR_PAIR(3));
 
 	while(1){
 		int key = getch();
@@ -116,10 +129,16 @@ void lose_menu(int screen_size_h, int screen_size_v){
 
 	print_you_lose(8, 5);
 
+	/* Initiliaze color */
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	attron(COLOR_PAIR(3));
+
 	move(16, 8);	
 	addstr("Press ENTER to return to main menu");
 	move(17, 9);	
 	addstr("Or another key to exit the game");
+
+	attroff(COLOR_PAIR(3));
 
 	if (getch() == '\n') main();
 
@@ -142,10 +161,18 @@ int start_game(void){
 	move(3, 56);
 	addstr("------------");
 
+	/* Initiliaze color */
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	attron(COLOR_PAIR(3));
+
 	/* Waits for player */
 	move(8, 12);
 	addstr("Press something to start!");
+
+	/* Turn-off color */
+	attron(COLOR_PAIR(3));
 	getch();
+
 	move(8, 12);
 	addstr("                         "); /* Erase text */
 	move(26, 0);
@@ -163,7 +190,7 @@ int start_game(void){
 
 	do{
 		/* Wait user input */
-		timeout(420);
+		timeout(200);
 		int key = getch();
 		timeout(-1);
 
@@ -205,11 +232,20 @@ int main_menu(void){
 	move(++x_coordinate, y_coordinate);
 	addstr("Choose an option:");
 	move(++x_coordinate, y_coordinate);
+
+	/* Initiliaze color */
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	attron(COLOR_PAIR(3));
+
 	addstr("1) Start game");
 	move(++x_coordinate, y_coordinate);
 	addstr("2) Credits");
 	move(++x_coordinate, y_coordinate);
 	addstr("3) Exit");
+
+	/* Turn color off */
+	attroff(COLOR_PAIR(3));
+
 	move(++x_coordinate, y_coordinate);
 	move(++x_coordinate, y_coordinate);
 	addstr("TIP: use W and S arrow to navigate and ENTER to select!");

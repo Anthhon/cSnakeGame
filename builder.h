@@ -27,6 +27,10 @@ void clear_in_range(int x_range, int y_range){
 }
 
 void print_name(int x_coordinate, int y_coordinate){
+	/* Initiliaze color */
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	attron(COLOR_PAIR(3));
+
 	move(x_coordinate, y_coordinate);
 	addstr(" _____       _   _");
 	move(++x_coordinate, y_coordinate);
@@ -37,6 +41,10 @@ void print_name(int x_coordinate, int y_coordinate){
 	addstr("|__|__|_|_| |_| |_|_|___|_|_|_  |");
 	move(++x_coordinate, y_coordinate);
 	addstr("                            |___|");
+
+	/* Turn-off color */
+	attroff(COLOR_PAIR(3));
+
 	return;
 }
 
@@ -53,6 +61,7 @@ void print_you_lose(int x_coordinate, int y_coordinate){
 	addstr("    | | (_) | |_| | | | (_) \\__ \\  __/");
 	move(++x_coordinate, y_coordinate);
 	addstr("    |_|\\___/ \\__,_| |_|\\___/|___/\\___|");
+
 	return;
 }
 
@@ -72,6 +81,7 @@ void print_snake(int x_coordinate, int y_coordinate){
 	addstr("   __________/ /");
 	move(++x_coordinate, y_coordinate);
 	addstr("-=:___________/");
+
 	return;
 }
 
@@ -79,6 +89,9 @@ void build_apple(int max_size_x, int max_size_y){
 
 	/* Initialize color */
 	init_pair(2, COLOR_MAGENTA, COLOR_BLACK);
+
+	/* Make sound when player eats an apple */
+	printf("\a\n");
 
 	/* Generate a random numbers beetween
 	 * block map size and build an apple */

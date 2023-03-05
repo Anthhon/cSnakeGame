@@ -104,6 +104,7 @@ void check_collision(int x_coord, int y_coord, snake_builder *snake[], int *snak
 	switch(next_position_char)
 	{
 	case BLOCK_CHAR:
+	case SNAKE_BODY:
 		*snake_alive = 0;
 		return;
 		break;
