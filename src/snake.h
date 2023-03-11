@@ -14,7 +14,7 @@
 #define BLOCK_CHAR '#'
 #define APPLE_CHAR '*'
 
-void update_score();
+void score_update();
 
 
 typedef struct snake_body{
@@ -111,7 +111,7 @@ void check_collision(int x_coord, int y_coord, snake_builder *snake[], int *snak
 	case APPLE_CHAR:
 		increase_snake_size(&snake[0]);
 		build_apple(25, 50);
-		update_score();
+		score_update();
 		return;
 		break;
 	default:

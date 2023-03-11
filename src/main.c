@@ -15,7 +15,7 @@
 
 int main(void);
 
-void update_score(){
+void score_update(){
 	/* Initialize at -1 so game starts with 0 */
 	static int score = -1;
 	++score;
@@ -65,7 +65,7 @@ int select_option(){
 	}
 }
 
-int exit_menu(void){
+int menu_exit(void){
 	int x_coordinate = 5,
 	    y_coordinate = 10;
 
@@ -94,7 +94,7 @@ int exit_menu(void){
 	}
 }
 
-void credits_menu(void){
+void menu_credits(void){
 	/* Print menu */
 	clear();
 	build_block(54, 20);
@@ -122,7 +122,7 @@ void credits_menu(void){
 	return;
 }
 
-void lose_menu(int screen_size_h, int screen_size_v){
+void menu_lose(int screen_size_h, int screen_size_v){
 	/* Clean game screen */
 	build_block(screen_size_h, screen_size_v);
 	clear_in_range(screen_size_h, screen_size_v);
@@ -145,7 +145,7 @@ void lose_menu(int screen_size_h, int screen_size_v){
 	return;
 }
 
-int start_game(void){
+int game_start(void){
 	/* Build scenario frame */
 	int block_size_h = 50,
 	    block_size_v = 25;
@@ -155,7 +155,7 @@ int start_game(void){
 
 	/* Build game GUI frame */
 	build_block_in(17, 12, 53, 0);
-	update_score();
+	score_update();
 	move(2, 57);
 	addstr("GAME STATS");
 	move(3, 56);
@@ -208,12 +208,12 @@ int start_game(void){
 	for (int i = 0; i < SNAKE_MAX_SIZE; ++i)
 		free(snake[i]);
 
-	lose_menu(block_size_h, block_size_v);
+	menu_lose(block_size_h, block_size_v);
 
 	return 0;
 }
 	
-int main_menu(void){
+int menu_main(void){
 	int x_coordinate = 11,
 	    y_coordinate = 10;
 
@@ -261,18 +261,18 @@ int main(void){
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	assume_default_colors(COLOR_WHITE, COLOR_BLACK);
 
-	switch(main_menu()){
+	switch(menu_main()){
 		case 15:
 			/* Start game */
-			start_game();
+			game_start();
 			break;
 		case 16:
 			/* Show credits */
-			credits_menu();
+			menu_credits();
 			break;
 		case 17:
 			/* Exit message */
-			if (exit_menu() == 2)
+			if (menu_exit() == 2)
 				main();
 			break;
 	}
